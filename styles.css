@@ -77,4 +77,12 @@ body {
 .block-preview {
   border: 1px solid black;
   padding: 10px;
+  background: rgb(244, 255, 0);  
+}
+
+#slider .ui-slider-range  { 
+  background: rgb(244, 255, 0) 
+}
+#slider .ui-slider-handle { 
+  background: rgb(244, 255, 0);  
 }

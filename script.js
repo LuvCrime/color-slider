@@ -1,18 +1,32 @@
 $(document).ready(function () {
   
   let swapOnTextColor = false;
+    let bgValue = 0;
+    let textValue = 0;
 
   $(".buttons-color").click(function (e) {
+
     let currentBtn = $(e.target).data("btn");
+
     if (currentBtn === "text") {
       swapOnTextColor = true;
     } else {
       swapOnTextColor = false;
     }
+    refreshSwatch(true)
   });
 
+  function onChange() {
+    let val = $("#slider").slider("value");
+    if (swapOnTextColor) {
+      textValue = val;
+    } else {
+      bgValue = val;
+    }
+    refreshSwatch()
+  }
+
   function getTheColor(colorVal) {
-    var theColor = "";
     if (colorVal < 50) {
       myRed = 255;
       myGreen = parseInt((colorVal * 2 * 255) / 100);
@@ -20,20 +34,20 @@ $(document).ready(function () {
       myRed = parseInt(((100 - colorVal) * 2 * 255) / 100);
       myGreen = 255;
     }
-    theColor = "rgb(" + myRed + "," + myGreen + ",0)";
-    return theColor;
+    return  "rgb(" + myRed + "," + myGreen + ",0)";
   }
 
-  function refreshSwatch() {
-    var coloredSlider = $("#slider").slider("value"),
-      myColor = getTheColor(coloredSlider);
+  function refreshSwatch(force = false) {
+    if (force) {
+      $("#slider").slider("value", swapOnTextColor ? textValue : bgValue);
+    }   
+    let  myColor = getTheColor(swapOnTextColor ? textValue :  bgValue);
 
     $("#slider .ui-slider-range").css("background-color", myColor);
 
     $("#slider .ui-state-default, .ui-widget-content .ui-state-default").css(
-      "background-color",
-      myColor
-    );
+      "background-color", myColor);
+
     if (swapOnTextColor) {
       $(".block-preview").css({ color: `${myColor}` });
     } else {
@@ -46,9 +60,9 @@ $(document).ready(function () {
       orientation: "horizontal",
       range: "min",
       max: 100,
-      value: 0,
-      slide: refreshSwatch,
-      change: refreshSwatch,
+      value: 53,
+      slide: onChange,
+      change: onChange,
     });
   });
 });
